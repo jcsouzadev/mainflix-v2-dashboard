@@ -1,33 +1,56 @@
 import pandas as pd
 from sqlalchemy import create_engine
+import os
+from dotenv import load_dotenv
+import argparse
+import logging
 
-# Credenciais do PostgreSQL
-usuario = "postgres"
-senha = "1w3e5tYU"
-host = "localhost"
-porta = "5432"
-banco = "mainflix_v2"
+# Configuração básica de logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Caminho do Excel
-excel_path = r'C:\Users\joyce\Downloads\BD Bom Jesus\Indicadores de Desempenho da Manutenção Master.xlsx'
-aba_desejada = 'BASE SAP'
+def main():
+    # Configurações via ambiente
+    load_dotenv()
+    DB_CONFIG = {
+        'user': os.getenv('DB_USER'),
+        'password': os.getenv('DB_PASSWORD'),
+        'host': os.getenv('DB_HOST', 'localhost'),
+        'port': os.getenv('DB_PORT', '5432'),
+        'database': os.getenv('DB_NAME')
+    }
 
-try:
-    # Verifica se a aba 'BASE SAP' existe antes de tentar ler
-    abas = pd.ExcelFile(excel_path).sheet_names
-    if aba_desejada not in abas:
-        raise ValueError(f"A aba '{aba_desejada}' não foi encontrada no arquivo Excel. Abas disponíveis: {abas}")
+    # Recebe caminho do Excel como argumento
+    parser = argparse.ArgumentParser()
+    parser.add_argument('excel_path', help='Caminho para o arquivo Excel')
+    parser.add_argument('--sheet', default='BASE SAP', help='Nome da aba a ser lida')
+    args = parser.parse_args()
 
-    # Ler apenas a aba correta
-    df = pd.read_excel(excel_path, sheet_name=aba_desejada)
+    try:
+        # Verificação da aba
+        abas = pd.ExcelFile(args.excel_path).sheet_names
+        if args.sheet not in abas:
+            raise ValueError(f"A aba '{args.sheet}' não encontrada. Abas disponíveis: {abas}")
 
-    # Criar conexão com PostgreSQL
-    engine = create_engine(f'postgresql://{usuario}:{senha}@{host}:{porta}/{banco}')
+        # Leitura dos dados
+        df = pd.read_excel(args.excel_path, sheet_name=args.sheet)
+        
+        # Validação básica
+        if df.empty:
+            raise ValueError("DataFrame vazio - nenhum dado para carregar")
 
-    # Substituir ou criar a tabela
-    df.to_sql('base_sap', engine, if_exists='replace', index=False)
+        # Conexão e upload
+        engine = create_engine(
+            f'postgresql://{DB_CONFIG["user"]}:{DB_CONFIG["password"]}@'
+            f'{DB_CONFIG["host"]}:{DB_CONFIG["port"]}/{DB_CONFIG["database"]}'
+        )
+        
+        df.to_sql('base_sap', engine, if_exists='replace', index=False)
+        logger.info(f"Dados carregados com sucesso! {len(df)} registros inseridos.")
 
-    print("Dados carregados com sucesso!")
+    except Exception as e:
+        logger.error(f"Erro durante a execução: {e}", exc_info=True)
+        raise
 
-except Exception as e:
-    print(f"Ocorreu um erro: {e}")
+if __name__ == '__main__':
+    main()

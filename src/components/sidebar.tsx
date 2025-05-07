@@ -50,8 +50,14 @@ export function Sidebar() {
     },
     { 
       name: 'Gestores', 
-      href: '#', 
+      href: '/dashboard/base_sap', 
       icon: <Users size={18} />,
+      disabled: true 
+    },
+    { 
+      name: 'Base', 
+      href: '#', 
+      icon: <Database size={18} />,
       disabled: true 
     },
   ];
