@@ -9,7 +9,18 @@ import {
   Clock,
   Calendar
 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, Tooltip, Legend, CartesianGrid } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Tooltip,
+  Legend,
+  CartesianGrid
+} from 'recharts';
 
 export default function DashboardPrincipal() {
   const [startDate, setStartDate] = useState<string>("");
@@ -17,7 +28,6 @@ export default function DashboardPrincipal() {
   const [week, setWeek] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
 
-  // Dados de exemplo
   const stats = [
     { title: "Total de Ordens", value: 125, icon: <ClipboardList className="text-white" /> },
     { title: "Realizadas", value: 89, icon: <CheckCircle2 className="text-white" /> },
@@ -26,7 +36,6 @@ export default function DashboardPrincipal() {
     { title: "Próx. Vencimento", value: 8, icon: <Calendar className="text-white" /> },
   ];
 
-  // Dados para o gráfico semanal
   const weeklyData = [
     { name: 'Seg', programado: 12, realizado: 8, naoRealizado: 4 },
     { name: 'Ter', programado: 15, realizado: 12, naoRealizado: 3 },
@@ -45,14 +54,12 @@ export default function DashboardPrincipal() {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Seção de Importação */}
-      
+    <div className="w-full min-h-screen bg-[#F2F2F2] p-4 md:p-6 space-y-6">
       <h1 className="text-2xl font-bold text-[#152340]">Gestão da Manutenção</h1>
 
       {/* Filtros */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
-        <div className="flex gap-2">
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <div className="flex flex-wrap gap-2">
           <input 
             type="date" 
             value={startDate} 
@@ -82,7 +89,7 @@ export default function DashboardPrincipal() {
       {/* Cards de Estatísticas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-[#027333] rounded-lg p-4 text-white">
+          <div key={index} className="bg-[#027333] rounded-lg p-4 text-white w-full">
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-sm">{stat.title}</p>
@@ -97,7 +104,7 @@ export default function DashboardPrincipal() {
       </div>
 
       {/* Gráfico Semanal */}
-      <div className="bg-white rounded-lg p-4 shadow">
+      <div className="bg-white rounded-lg p-4 shadow w-full">
         <h2 className="text-lg font-semibold mb-4">Atividades por Dia da Semana</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -116,7 +123,7 @@ export default function DashboardPrincipal() {
       </div>
 
       {/* Gráfico de Eficiência */}
-      <div className="bg-white rounded-lg p-4 shadow">
+      <div className="bg-white rounded-lg p-4 shadow w-full">
         <h2 className="text-lg font-semibold mb-2">Eficiência do Cumprimento</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -132,3 +139,6 @@ export default function DashboardPrincipal() {
     </div>
   );
 }
+
+
+

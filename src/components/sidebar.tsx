@@ -1,4 +1,3 @@
-// src/components/sidebar.tsx
 'use client';
 
 import Link from 'next/link';
@@ -11,13 +10,20 @@ import {
   Upload,
   Database,
   HardDrive,
-  ClipboardList
+  ClipboardList,
+  BarChart3
 } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
 
   const menuItems = [
+    { 
+      name: 'Dashboard de Manutenção', 
+      href: '/dashboard/dms1', // Novo link para o dashboard
+      icon: <BarChart3 size={18} />, // Pode mudar o ícone conforme desejado
+      disabled: false 
+    },
     { 
       name: 'Gestão', 
       href: '/dashboard/principal',
@@ -28,6 +34,12 @@ export function Sidebar() {
       name: 'Equipamentos', 
       href: '/dashboard/equipamento', 
       icon: <HardDrive size={18} />,
+      disabled: false 
+    },
+    { 
+      name: 'Indicadores', 
+      href: '/dashboard/indicadores', 
+      icon: <BarChart3 size={18} />, 
       disabled: false 
     },
     { 
@@ -45,13 +57,13 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="w-64 h-screen bg-[#152340] text-white p-4 flex flex-col">
+    <div className="w-64 h-screen bg-[#e8eaed] text-white p-4 flex flex-col">
       {/* Cabeçalho */}
       <div className="mb-8">
-        <h1 className="text-xl font-bold">Mainflix V2</h1>
-        <p className="text-sm text-gray-300 mt-1">Gestão de Manutenção</p>
+        <h1 className="text-xl font-bold text-black">Mainflix V2</h1>
+        <p className="text-sm text-black mt-1">Gestão de Manutenção</p>
       </div>
-      
+     
       {/* Menu principal */}
       <nav className="flex-1 space-y-2">
         {menuItems.map((item) => (
@@ -62,12 +74,12 @@ export function Sidebar() {
               pathname === item.href
                 ? 'bg-[#027333] text-white shadow-lg'
                 : item.disabled
-                ? 'text-gray-500 cursor-not-allowed'
-                : 'text-gray-200 hover:bg-[#025939] hover:text-white hover:shadow-md'
+                ? 'text-black cursor-not-allowed'
+                : 'text-black hover:bg-[#025939] hover:text-white hover:shadow-md'
             }`}
           >
             <span className={`mr-3 ${
-              pathname === item.href ? 'text-white' : 'text-gray-300'
+              pathname === item.href ? 'text-white' : 'text-black'
             }`}>
               {item.icon}
             </span>
@@ -76,13 +88,13 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Área de upload (opcional) */}
-      <div className="mt-auto pt-4 border-t border-[#1E3A8A]">
-        <div className="mb-3 text-sm text-gray-300 flex items-center">
+      {/* Área de upload */}
+      <div className="mt-auto pt-4 border-t border-[#025939]">
+        <div className="mb-3 text-sm text-black flex items-center">
           <Database className="mr-2" size={16} />
           Importar dados
         </div>
-        <button className="w-full bg-[#1E3A8A] hover:bg-[#1E40AF] text-white py-2 px-3 rounded-lg text-sm flex items-center justify-center transition-colors">
+        <button className="w-full bg-[#025939] hover:bg-[#025939] text-white py-2 px-3 rounded-lg text-sm flex items-center justify-center transition-colors">
           <Upload className="mr-2" size={16} />
           Carregar planilha
         </button>
@@ -90,3 +102,4 @@ export function Sidebar() {
     </div>
   );
 }
+
