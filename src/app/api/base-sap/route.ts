@@ -1,13 +1,14 @@
+
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import { BaseSap } from '@/types/baseSap';
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'mainflix_v2',
-  password: '1w3e5tYU',
-  port: 5432,
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || '0.0.0.0',
+  database: process.env.DB_NAME || 'mainflix_v2',
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT || '5432'),
 });
 
 export async function GET() {
